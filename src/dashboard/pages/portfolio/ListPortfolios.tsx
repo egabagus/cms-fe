@@ -50,7 +50,7 @@ export default function ListPortfolios() {
         </Typography>
         <CardContent>
           <Typography component="h2" variant="subtitle2" gutterBottom>
-            halo
+            hjalo
           </Typography>
           <Grid
             container

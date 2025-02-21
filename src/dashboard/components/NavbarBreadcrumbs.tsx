@@ -3,8 +3,9 @@ import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import Breadcrumbs, { breadcrumbsClasses } from "@mui/material/Breadcrumbs";
 import NavigateNextRoundedIcon from "@mui/icons-material/NavigateNextRounded";
-import { useLocation } from "react-router-dom";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 import mainListItems from "../utils/mainListItems";
+import { Link } from "@mui/material";
 
 const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
   margin: theme.spacing(1, 0),
@@ -25,18 +26,35 @@ const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
 // );
 
 export default function NavbarBreadcrumbs() {
+  const location = useLocation(); // Dapatkan path dari react-router
+  const pathnames = location.pathname.split("/").filter((x) => x); // Pisahkan path
+
   return (
-    <StyledBreadcrumbs
+    <Breadcrumbs
       aria-label="breadcrumb"
       separator={<NavigateNextRoundedIcon fontSize="small" />}
     >
-      <Typography variant="body1">Dashboard</Typography>
-      <Typography
-        variant="body1"
-        sx={{ color: "text.primary", fontWeight: 600 }}
-      >
-        {/* {currentItem?.text} */}
-      </Typography>
-    </StyledBreadcrumbs>
+      <Link component={RouterLink} to="/" underline="hover">
+        Dashboard
+      </Link>
+      {pathnames.map((value, index) => {
+        const to = `/${pathnames.slice(0, index + 1).join("/")}`;
+        const isLast = index === pathnames.length - 1;
+
+        return isLast ? (
+          <Typography
+            key={to}
+            variant="body1"
+            sx={{ color: "text.primary", fontWeight: 600 }}
+          >
+            {decodeURIComponent(value)}
+          </Typography>
+        ) : (
+          <Link key={to} component={RouterLink} to={to} underline="hover">
+            {decodeURIComponent(value)}
+          </Link>
+        );
+      })}
+    </Breadcrumbs>
   );
 }
