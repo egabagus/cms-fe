@@ -19,6 +19,12 @@ import {
   FacebookIcon,
   SitemarkIcon,
 } from "./components/CustomIcons";
+import { Form, Navigate, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { JSX } from "@emotion/react/jsx-runtime";
+import Loader from "../../utils/components/Loader";
+import { Alert, Snackbar } from "@mui/material";
+import ApiConnectionService from "../../services/auth/ApiConnectionService";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -45,6 +51,13 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [error, setError] = React.useState("");
+  const url = import.meta.env.VITE_API_URL + "/login";
+  const navigate = useNavigate();
+  const [loading, setLoading] = React.useState(false);
+  const [openAlert, setOpenAlert] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -90,8 +103,34 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
       setPasswordErrorMessage("");
     }
 
+    if ((isValid = true)) {
+      handleLogin();
+    }
     return isValid;
   };
+
+  const handleLogin = () => {
+    setLoading(true);
+
+    ApiConnectionService.post("/login", {
+      email,
+      password,
+    })
+      .then((response) => {
+        navigate("/admin");
+        sessionStorage.setItem("authToken", response.data.access_token);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.response.data.message);
+        setLoading(false);
+        setOpenAlert(true);
+      });
+  };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <Card variant="outlined">
@@ -129,6 +168,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
             fullWidth
             variant="outlined"
             color={emailError ? "error" : "primary"}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </FormControl>
         <FormControl>
@@ -146,6 +186,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
             fullWidth
             variant="outlined"
             color={passwordError ? "error" : "primary"}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </FormControl>
         <FormControlLabel
@@ -153,8 +194,23 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
           label="Remember me"
         />
         <ForgotPassword open={open} handleClose={handleClose} />
+        {/* Snackbar untuk menampilkan error */}
+        <Snackbar
+          open={openAlert}
+          autoHideDuration={3000}
+          onClose={() => setOpen(false)}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert
+            onClose={() => setOpenAlert(false)}
+            severity="error"
+            variant="filled"
+          >
+            {error}
+          </Alert>
+        </Snackbar>
         <Button
-          type="submit"
+          type="button"
           fullWidth
           variant="contained"
           onClick={validateInputs}
