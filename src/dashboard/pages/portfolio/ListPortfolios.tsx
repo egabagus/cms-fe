@@ -6,6 +6,8 @@ import Grid from "@mui/material/Grid2";
 import HighlightedCard from "../../components/HighlightedCard";
 import SessionsChart from "../../components/SessionsChart";
 import PageViewsBarChart from "../../components/PageViewsBarChart";
+import ApiConnectionService from "../../services/auth/ApiConnectionService";
+import axios from "axios";
 
 const data: StatCardProps[] = [
   {
@@ -41,7 +43,17 @@ const data: StatCardProps[] = [
   },
 ];
 
+const getUser = () => {
+  React.useEffect(() => {
+    ApiConnectionService.get("portfolio/data").then((response) => {
+      console.log(response);
+    });
+  }, []);
+  console.log(sessionStorage.getItem("authToken"));
+};
+
 export default function ListPortfolios() {
+  getUser();
   return (
     <Box sx={{ width: "100%", pt: 3, m: 0 }}>
       <Card variant="outlined">
