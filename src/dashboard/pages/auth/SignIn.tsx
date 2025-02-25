@@ -122,7 +122,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
         setLoading(false);
       })
       .catch((err) => {
-        setError(err.response.data.message);
+        setError(err.data.message);
         setLoading(false);
         setOpenAlert(true);
       });

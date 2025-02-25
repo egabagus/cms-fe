@@ -8,6 +8,8 @@ import SessionsChart from "../../components/SessionsChart";
 import PageViewsBarChart from "../../components/PageViewsBarChart";
 import ApiConnectionService from "../../services/auth/ApiConnectionService";
 import axios from "axios";
+import TablePortfolio from "./components/TablePortfolio";
+import ModalAddPortfolio from "./components/AddPortfolio";
 
 const data: StatCardProps[] = [
   {
@@ -43,43 +45,16 @@ const data: StatCardProps[] = [
   },
 ];
 
-const getUser = () => {
-  React.useEffect(() => {
-    ApiConnectionService.get("portfolio/data").then((response) => {
-      console.log(response);
-    });
-  }, []);
-  console.log(sessionStorage.getItem("authToken"));
-};
-
-export default function ListPortfolios() {
-  getUser();
+export default function IndexPortfolios() {
   return (
     <Box sx={{ width: "100%", pt: 3, m: 0 }}>
       <Card variant="outlined">
         <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
-          Overview
+          List Portfolios
         </Typography>
+        <ModalAddPortfolio />
         <CardContent>
-          <Typography component="h2" variant="subtitle2" gutterBottom>
-            hjalo
-          </Typography>
-          <Grid
-            container
-            spacing={2}
-            columns={12}
-            sx={{ mb: (theme) => theme.spacing(2) }}
-          >
-            <Grid size={{ xs: 12, md: 4 }}>
-              <HighlightedCard />
-            </Grid>
-            <Grid size={{ xs: 12, md: 4 }}>
-              <HighlightedCard />
-            </Grid>
-            <Grid size={{ xs: 12, md: 4 }}>
-              <HighlightedCard />
-            </Grid>
-          </Grid>
+          <TablePortfolio />
         </CardContent>
       </Card>
     </Box>
