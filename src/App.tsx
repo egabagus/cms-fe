@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Router, Routes } from "react-router-dom";
 import "./App.css";
 import Dashboard from "./dashboard/Dashboard.tsx";
-import ListPortfolios from "./dashboard/pages/portfolio/ListPortfolios.tsx";
+import ListPortfolios from "./dashboard/pages/portfolio/IndexPortfolio.tsx";
 import MainLayout from "./dashboard/layout/MainLayout.tsx";
 import Login from "./dashboard/pages/auth/Login.tsx";
 import ProtectedRoute from "./dashboard/services/auth/ProtectedRoute.tsx";
