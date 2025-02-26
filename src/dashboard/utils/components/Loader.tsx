@@ -1,5 +1,9 @@
-import { CircularProgress } from "@mui/material";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 export default function Loader() {
-  return <CircularProgress />;
+  return (
+    <Backdrop sx={{ color: "#fff", zIndex: 99 }}>
+      <CircularProgress color="inherit" />
+    </Backdrop>
+  );
 }

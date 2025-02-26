@@ -1,18 +1,15 @@
-import * as React from "react";
 import { Box, Card, CardContent, Typography } from "@mui/material";
-import TablePortfolio from "./components/TablePortfolio";
-import ModalAddPortfolio from "./components/AddPortfolio";
+import ListTechnology from "./components/ListTechnology";
 
-export default function IndexPortfolios() {
+export default function IndexTechnology() {
   return (
     <Box sx={{ width: "100%", pt: 3, m: 0 }}>
       <Card variant="outlined">
         <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
-          List Portfolios
+          List Technologies
         </Typography>
-        <ModalAddPortfolio />
         <CardContent>
-          <TablePortfolio />
+          <ListTechnology />
         </CardContent>
       </Card>
     </Box>
