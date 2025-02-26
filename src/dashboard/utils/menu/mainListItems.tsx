@@ -1,12 +1,18 @@
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
-import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
+import BurstModeIcon from "@mui/icons-material/BurstMode";
+import TerminalIcon from "@mui/icons-material/Terminal";
 
 const mainListItems = [
   { text: "Home", icon: <HomeRoundedIcon />, path: "/admin" },
   {
     text: "Portfolio",
-    icon: <AnalyticsRoundedIcon />,
+    icon: <BurstModeIcon />,
     path: "/admin/portfolio",
+  },
+  {
+    text: "Technology",
+    icon: <TerminalIcon />,
+    path: "/admin/tech",
   },
 ];
 
