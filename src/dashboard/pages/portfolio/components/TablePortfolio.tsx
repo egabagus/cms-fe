@@ -28,7 +28,6 @@ export default function TablePortfolio() {
         setRowCount(response.data.meta.total);
       })
       .catch((response) => {
-        console.log(response);
         setLoading(false);
       })
       .finally(() => {

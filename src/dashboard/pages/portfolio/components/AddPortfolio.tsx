@@ -5,30 +5,46 @@ import {
   FormControl,
   FormLabel,
   Grid2,
+  MenuItem,
+  Select,
   Snackbar,
   Stack,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomModal from "../../../components/CustomModal";
 import ApiConnectionService from "../../../services/auth/ApiConnectionService";
-import Loader from "../../../utils/components/Loader";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 export default function AddPortfolio() {
   const [openModal, setOpenModal] = useState(false);
   const handleOpen = () => setOpenModal(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [tech, setTechs] = useState<{ id: number; name: string }[]>([]);
+  const [ReactQuill, setReactQuill] = useState<any>(null);
 
   const [formData, setFormData] = useState({
     title: "",
     meta_desc: "",
+    technologies: [],
+    order: "",
+    description: "",
+    link: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleDescChange = (value: string) => {
+    setFormData({
+      ...formData,
+      description: value,
     });
   };
 
@@ -51,10 +67,23 @@ export default function AddPortfolio() {
       });
   };
 
+  const handleSelectChange = (event: any) => {
+    setFormData({ ...formData, technologies: event.target.value });
+  };
+
+  useEffect(() => {
+    ApiConnectionService.get("/technology/data").then((response) => {
+      setTechs(response.data.data);
+      console.log(response.data);
+    });
+  }, []);
+
   return (
     <>
       <div>
-        <Button onClick={handleOpen}>Open modal</Button>
+        <Button variant="contained" onClick={handleOpen}>
+          New Portfolio
+        </Button>
         <CustomModal
           openModal={openModal}
           closeModal={() => setOpenModal(false)}
@@ -83,6 +112,44 @@ export default function AddPortfolio() {
                     fullWidth
                   />
                 </FormControl>
+                <FormControl
+                  fullWidth
+                  sx={{ marginTop: "20px" }}
+                  variant="outlined"
+                >
+                  <FormLabel id="demo-simple-select-label">
+                    Technology
+                  </FormLabel>
+                  <Select
+                    multiple
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Age"
+                    name="technologies"
+                    value={formData.technologies}
+                    onChange={handleSelectChange}
+                  >
+                    {tech.map((techs) => (
+                      <MenuItem value={techs.id} key={techs.id}>
+                        {techs.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl fullWidth sx={{ marginTop: "20px" }}>
+                  <FormLabel htmlFor="link">Link Project</FormLabel>
+                  <TextField
+                    id="link"
+                    type="text"
+                    name="link"
+                    placeholder="Link Project"
+                    onChange={handleChange}
+                    autoFocus
+                    required
+                    variant="outlined"
+                    fullWidth
+                  />
+                </FormControl>
               </Grid2>
               <Grid2 size={6}>
                 <FormControl fullWidth>
@@ -99,7 +166,30 @@ export default function AddPortfolio() {
                     fullWidth
                   />
                 </FormControl>
+                <FormControl fullWidth sx={{ marginTop: "20px" }}>
+                  <FormLabel htmlFor="order">Order</FormLabel>
+                  <TextField
+                    id="order"
+                    type="number"
+                    name="order"
+                    placeholder="Order"
+                    onChange={handleChange}
+                    autoFocus
+                    required
+                    variant="outlined"
+                    fullWidth
+                  />
+                </FormControl>
               </Grid2>
+              <FormControl fullWidth>
+                <FormLabel htmlFor="description">Description</FormLabel>
+                <ReactQuill
+                  value={formData.description}
+                  onChange={handleDescChange}
+                  theme="snow"
+                  style={{ marginBottom: "16px", minHeight: "150px" }}
+                />
+              </FormControl>
             </Grid2>
             <Stack direction="row" spacing={1}>
               <Button
