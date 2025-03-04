@@ -11,11 +11,12 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CustomModal from "../../../components/CustomModal";
 import ApiConnectionService from "../../../services/auth/ApiConnectionService";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import { createEditor, Descendant } from "slate";
+import { Slate, Editable, withReact } from "slate-react";
+import RichTextEditor from "../../../components/RichTextEditor";
 
 export default function AddPortfolio() {
   const [openModal, setOpenModal] = useState(false);
@@ -23,7 +24,7 @@ export default function AddPortfolio() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [tech, setTechs] = useState<{ id: number; name: string }[]>([]);
-  const [ReactQuill, setReactQuill] = useState<any>(null);
+  const editor = useMemo(() => withReact(createEditor()), []);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -41,12 +42,17 @@ export default function AddPortfolio() {
     });
   };
 
-  const handleDescChange = (value: string) => {
-    setFormData({
-      ...formData,
-      description: value,
-    });
-  };
+  const [description, setDescription] = useState([
+    { type: "paragraph", children: [{ text: "" }] },
+  ]);
+
+  // const handleChangeSlate = (value: Descendant[]) => {
+  //   setDescription(value);
+  //   setFormData({
+  //     ...formData,
+  //     description: JSON.stringify(value), // Simpan sebagai JSON string
+  //   });
+  // };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -183,12 +189,7 @@ export default function AddPortfolio() {
               </Grid2>
               <FormControl fullWidth>
                 <FormLabel htmlFor="description">Description</FormLabel>
-                <ReactQuill
-                  value={formData.description}
-                  onChange={handleDescChange}
-                  theme="snow"
-                  style={{ marginBottom: "16px", minHeight: "150px" }}
-                />
+                <RichTextEditor />
               </FormControl>
             </Grid2>
             <Stack direction="row" spacing={1}>
