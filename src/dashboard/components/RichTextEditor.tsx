@@ -23,13 +23,17 @@ const HOTKEYS = {
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
 const TEXT_ALIGN_TYPES = ["left", "center", "right", "justify"];
 
-const RichTextExample = () => {
+const RichTextEditor = ({ onChange }) => {
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
   return (
-    <Slate editor={editor} initialValue={initialValue}>
+    <Slate
+      editor={editor}
+      initialValue={initialValue}
+      onChange={(newValue) => onChange(newValue)}
+    >
       <Toolbar>
         <MarkButton format="bold" icon="material-symbol-outlined" />
         <MarkButton format="italic" icon="format_italic" />
@@ -244,4 +248,4 @@ const initialValue: Descendant[] = [
   },
 ];
 
-export default RichTextExample;
+export default RichTextEditor;

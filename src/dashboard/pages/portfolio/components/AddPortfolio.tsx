@@ -23,6 +23,7 @@ export default function AddPortfolio() {
   const handleOpen = () => setOpenModal(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [tech, setTechs] = useState<{ id: number; name: string }[]>([]);
   const editor = useMemo(() => withReact(createEditor()), []);
 
@@ -33,6 +34,7 @@ export default function AddPortfolio() {
     order: "",
     description: "",
     link: "",
+    thumbnail: null,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,34 +44,40 @@ export default function AddPortfolio() {
     });
   };
 
-  const [description, setDescription] = useState([
-    { type: "paragraph", children: [{ text: "" }] },
-  ]);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFormData({
+        ...formData,
+        thumbnail: e.target.files[0], // Simpan objek File
+      });
+    }
+  };
 
-  // const handleChangeSlate = (value: Descendant[]) => {
-  //   setDescription(value);
-  //   setFormData({
-  //     ...formData,
-  //     description: JSON.stringify(value), // Simpan sebagai JSON string
-  //   });
-  // };
-
+  const handleEditorChange = (newContent) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      description: JSON.stringify(newContent), // Simpan teks dari editor
+    }));
+  };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     setLoading(true);
-    ApiConnectionService.post("/portfolio/store", formData)
+    ApiConnectionService.post("/portfolio/store", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
       .then((response) => {
-        console.log(response);
+        setSuccess(true);
       })
       .catch((response) => {
-        console.log(response.data);
         setLoading(false);
+        setError(true);
       })
       .finally(() => {
         setLoading(false);
         setOpenModal(false);
-        setError(true);
       });
   };
 
@@ -186,10 +194,22 @@ export default function AddPortfolio() {
                     fullWidth
                   />
                 </FormControl>
+                <FormControl fullWidth sx={{ marginTop: "20px" }}>
+                  <FormLabel htmlFor="thumbnail">Thumbnail</FormLabel>
+                  <TextField
+                    type="file"
+                    id="thumbnail"
+                    name="thumbnail"
+                    variant="outlined"
+                    onChange={handleFileChange}
+                    fullWidth
+                    margin="normal"
+                  />
+                </FormControl>
               </Grid2>
               <FormControl fullWidth>
                 <FormLabel htmlFor="description">Description</FormLabel>
-                <RichTextEditor />
+                <RichTextEditor onChange={handleEditorChange} />
               </FormControl>
             </Grid2>
             <Stack direction="row" spacing={1}>
@@ -220,6 +240,16 @@ export default function AddPortfolio() {
       >
         <Alert severity="error" onClose={() => setError(false)}>
           505 | Server Error
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={success}
+        autoHideDuration={5000}
+        onClose={() => setSuccess(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }} // Letakkan di tengah atas
+      >
+        <Alert severity="success" onClose={() => setSuccess(false)}>
+          Saved Successfully
         </Alert>
       </Snackbar>
     </>
