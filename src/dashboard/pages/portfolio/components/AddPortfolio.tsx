@@ -11,19 +11,21 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CustomModal from "../../../components/CustomModal";
 import ApiConnectionService from "../../../services/auth/ApiConnectionService";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import { createEditor, Descendant } from "slate";
+import { Slate, Editable, withReact } from "slate-react";
+import RichTextEditor from "../../../components/RichTextEditor";
 
 export default function AddPortfolio() {
   const [openModal, setOpenModal] = useState(false);
   const handleOpen = () => setOpenModal(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [tech, setTechs] = useState<{ id: number; name: string }[]>([]);
-  const [ReactQuill, setReactQuill] = useState<any>(null);
+  const editor = useMemo(() => withReact(createEditor()), []);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -32,6 +34,7 @@ export default function AddPortfolio() {
     order: "",
     description: "",
     link: "",
+    thumbnail: null,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,29 +44,40 @@ export default function AddPortfolio() {
     });
   };
 
-  const handleDescChange = (value: string) => {
-    setFormData({
-      ...formData,
-      description: value,
-    });
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFormData({
+        ...formData,
+        thumbnail: e.target.files[0], // Simpan objek File
+      });
+    }
   };
 
+  const handleEditorChange = (newContent) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      description: JSON.stringify(newContent), // Simpan teks dari editor
+    }));
+  };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     setLoading(true);
-    ApiConnectionService.post("/portfolio/store", formData)
+    ApiConnectionService.post("/portfolio/store", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
       .then((response) => {
-        console.log(response);
+        setSuccess(true);
       })
       .catch((response) => {
-        console.log(response.data);
         setLoading(false);
+        setError(true);
       })
       .finally(() => {
         setLoading(false);
         setOpenModal(false);
-        setError(true);
       });
   };
 
@@ -180,15 +194,22 @@ export default function AddPortfolio() {
                     fullWidth
                   />
                 </FormControl>
+                <FormControl fullWidth sx={{ marginTop: "20px" }}>
+                  <FormLabel htmlFor="thumbnail">Thumbnail</FormLabel>
+                  <TextField
+                    type="file"
+                    id="thumbnail"
+                    name="thumbnail"
+                    variant="outlined"
+                    onChange={handleFileChange}
+                    fullWidth
+                    margin="normal"
+                  />
+                </FormControl>
               </Grid2>
               <FormControl fullWidth>
                 <FormLabel htmlFor="description">Description</FormLabel>
-                <ReactQuill
-                  value={formData.description}
-                  onChange={handleDescChange}
-                  theme="snow"
-                  style={{ marginBottom: "16px", minHeight: "150px" }}
-                />
+                <RichTextEditor onChange={handleEditorChange} />
               </FormControl>
             </Grid2>
             <Stack direction="row" spacing={1}>
@@ -219,6 +240,16 @@ export default function AddPortfolio() {
       >
         <Alert severity="error" onClose={() => setError(false)}>
           505 | Server Error
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={success}
+        autoHideDuration={5000}
+        onClose={() => setSuccess(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }} // Letakkan di tengah atas
+      >
+        <Alert severity="success" onClose={() => setSuccess(false)}>
+          Saved Successfully
         </Alert>
       </Snackbar>
     </>

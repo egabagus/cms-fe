@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-react": "^9.5.0",
+    "@emotion/css": "^11.13.5",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.4.5",
@@ -18,13 +20,20 @@
     "@mui/x-data-grid": "^7.27.0",
     "@mui/x-date-pickers": "^7.27.0",
     "@mui/x-tree-view": "^7.26.0",
+    "@slate-serializers/html": "^2.2.3",
+    "@tinymce/tinymce-react": "^6.0.0",
     "axios": "^1.7.9",
+    "ckeditor5": "^44.2.1",
     "dayjs": "^1.11.13",
     "quill": "^2.0.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-quill": "^2.0.0",
-    "react-router-dom": "^7.2.0"
+    "react-router-dom": "^7.2.0",
+    "slate": "^0.112.0",
+    "slate-history": "^0.110.3",
+    "slate-html-serializer": "^0.8.13",
+    "slate-react": "^0.112.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
