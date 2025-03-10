@@ -3,35 +3,44 @@ import {
   FormControl,
   FormLabel,
   Grid2,
-  MenuItem,
   Select,
+  Stack,
   TextField,
 } from "@mui/material";
 import CustomModal from "../../../components/CustomModal";
+import { useEffect, useState } from "react";
+import ApiConnectionService from "../../../services/auth/ApiConnectionService";
+import { PortfolioData } from "@/types/portfolio.types";
 
-interface DetailModalProps {
-  open: boolean;
-  handleClose: () => void;
-  data: {
-    id: number;
-    title: string;
-    meta_desc: string;
-    link: string;
-    order: number;
-    techs: string[];
-    description: string;
-  };
-}
+const DetailPortfolio = ({
+  data,
+  detailClose,
+}: {
+  data: any;
+  detailClose: () => void;
+}) => {
+  if (!data) {
+    return null;
+  }
 
-const DetailPortfolio = ({ open, handleClose, data }: DetailModalProps) => {
+  const [dataPort, findData] = useState<PortfolioData>({});
+
+  useEffect(() => {
+    ApiConnectionService.get(`/portfolio/${data.id}/detail`).then(
+      (response) => {
+        findData(response.data.data);
+      }
+    );
+  }, [data?.id]);
+
   return (
-    <div>
-      <CustomModal
-        openModal={open}
-        closeModal={() => handleClose(false)}
-        modalHeading="Detail Portfolio"
-        width={800}
-      >
+    <CustomModal
+      openModal={true}
+      closeModal={() => detailClose()}
+      modalHeading="Detail Portfolio"
+      width={800}
+    >
+      <form>
         <Grid2
           container
           spacing={2}
@@ -46,11 +55,30 @@ const DetailPortfolio = ({ open, handleClose, data }: DetailModalProps) => {
                 type="text"
                 name="title"
                 placeholder="Portfolio title"
-                onChange={handleChange}
                 autoFocus
                 required
                 variant="outlined"
                 fullWidth
+                value={dataPort?.title || ""}
+                slotProps={{
+                  input: {
+                    readOnly: true,
+                  },
+                }}
+              />
+            </FormControl>
+            <FormControl fullWidth sx={{ marginTop: "20px" }}>
+              <FormLabel htmlFor="link">Link Project</FormLabel>
+              <TextField
+                id="link"
+                type="text"
+                name="link"
+                placeholder="Link Project"
+                autoFocus
+                required
+                variant="outlined"
+                fullWidth
+                value={dataPort?.link || ""}
               />
             </FormControl>
           </Grid2>
@@ -62,16 +90,37 @@ const DetailPortfolio = ({ open, handleClose, data }: DetailModalProps) => {
                 type="text"
                 name="meta_desc"
                 placeholder="Portfolio Meta"
-                onChange={handleChange}
                 autoFocus
                 required
                 variant="outlined"
                 fullWidth
+                value={dataPort?.meta_desc || ""}
+              />
+            </FormControl>
+            <FormControl fullWidth sx={{ marginTop: "20px" }}>
+              <FormLabel htmlFor="order">Order</FormLabel>
+              <TextField
+                id="order"
+                type="number"
+                name="order"
+                placeholder="Order"
+                autoFocus
+                required
+                variant="outlined"
+                fullWidth
+                value={dataPort?.order || ""}
               />
             </FormControl>
           </Grid2>
         </Grid2>
-      </CustomModal>
-    </div>
+        <Stack direction="row" spacing={1}>
+          <Button type="button" variant="outlined">
+            Cancel
+          </Button>
+        </Stack>
+      </form>
+    </CustomModal>
   );
 };
+
+export default DetailPortfolio;
