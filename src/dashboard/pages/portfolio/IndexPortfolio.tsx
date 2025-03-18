@@ -1,5 +1,12 @@
 import * as React from "react";
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Stack,
+  Typography,
+} from "@mui/material";
 import TablePortfolio from "./components/TablePortfolio";
 import ModalAddPortfolio from "./components/AddPortfolio";
 
@@ -10,7 +17,10 @@ export default function IndexPortfolios() {
         <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
           List Portfolios
         </Typography>
-        <ModalAddPortfolio />
+        <Stack spacing={2}>
+          <ModalAddPortfolio />
+          <Button>Create</Button>
+        </Stack>
         <CardContent>
           <TablePortfolio />
         </CardContent>

@@ -1,39 +1,18 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ApiConnectionService from "../../../services/auth/ApiConnectionService";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { IconButton } from "@mui/material";
+import { useTechContext } from "../TechContext";
 
 export default function ListTechnology() {
-  const [row, setRows] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [paginationModel, setPaginationModel] = useState({
-    page: 0,
-    pageSize: 10,
-  });
-  const [rowCount, setRowCount] = useState(0);
+  const { tech, rowCount, paginationModel, setPaginationModel, fetchTech } =
+    useTechContext();
 
-  useEffect(() => {
-    data();
-  }, [paginationModel]);
-
-  const data = () => {
-    setLoading(true);
-    ApiConnectionService.get("/technology/data", {
-      params: {
-        page: paginationModel.page + 1,
-        per_page: paginationModel.pageSize,
-      },
-    })
-      .then((response) => {
-        setRows(response.data.data);
-        setRowCount(response.data.meta.total);
-      })
-      .catch((response) => {
-        console.log(response);
-        setLoading(false);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  const handleDelete = (id: number) => {
+    ApiConnectionService.post("/technology/delete", { id }).then(() => {
+      fetchTech();
+    });
   };
 
   const columns: GridColDef[] = [
@@ -46,16 +25,29 @@ export default function ListTechnology() {
         1 +
         paginationModel.page * paginationModel.pageSize,
     },
-    { field: "name", headerName: "Name", flex: 3 },
+    { field: "name", headerName: "Name", flex: 2 },
     { field: "description", headerName: "Description", flex: 6 },
+    {
+      field: "action",
+      headerName: "Actions",
+      flex: 1,
+      renderCell: (params) => (
+        <IconButton
+          aria-label="delete"
+          onClick={() => handleDelete(params.row.id)}
+        >
+          <DeleteIcon />
+        </IconButton>
+      ),
+    },
   ];
 
   return (
     <div style={{ height: "100%", width: "100%" }}>
       <DataGrid
         columns={columns}
-        rows={row}
-        loading={loading}
+        rows={tech}
+        // loading={loading}
         rowCount={rowCount}
         pageSizeOptions={[10, 20, 50]}
         paginationMode="server"

@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import ApiConnectionService from "../../../services/auth/ApiConnectionService";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
+import { Button, IconButton, Stack } from "@mui/material";
 import DetailPortfolio from "./DetailPortfolio";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function TablePortfolio() {
   const [row, setRows] = useState([]);
@@ -65,13 +68,35 @@ export default function TablePortfolio() {
       headerName: "Aksi",
       flex: 2,
       renderCell: (params) => (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleOpen(params.row)}
-        >
-          Detail
-        </Button>
+        <Stack direction={row} spacing={2}>
+          <Button
+            onClick={() => handleOpen(params.row)}
+            startIcon={<VisibilityIcon />}
+            size="small"
+            color="info"
+            variant="contained"
+          >
+            Detail
+          </Button>
+          <Button
+            type="button"
+            startIcon={<EditIcon />}
+            size="small"
+            color="warning"
+            variant="contained"
+          >
+            Edit
+          </Button>
+          <Button
+            type="button"
+            startIcon={<DeleteIcon />}
+            size="small"
+            color="error"
+            variant="contained"
+          >
+            Delete
+          </Button>
+        </Stack>
       ),
     },
   ];
