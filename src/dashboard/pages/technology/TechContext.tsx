@@ -1,11 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import ApiConnectionService from "../../services/auth/ApiConnectionService";
-
-interface Tech {
-  id: number;
-  name: string;
-  description: string;
-}
+import { Tech } from "../../../types/tech.types";
 
 interface TechContextType {
   tech: Tech[];

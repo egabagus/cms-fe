@@ -18,7 +18,7 @@ export default function IndexTechnology() {
             </Typography>
             <AddTechnology />
           </Stack>
-          <CardContent>
+          <CardContent sx={{ marginTop: 2 }}>
             <ListTechnology />
           </CardContent>
         </Card>
