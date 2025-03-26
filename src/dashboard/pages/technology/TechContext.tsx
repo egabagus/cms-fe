@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import ApiConnectionService from "../../services/auth/ApiConnectionService";
+import ApiConnectionService from "../../services/ApiConnectionService";
 import { Tech } from "../../../types/tech.types";
 
 interface TechContextType {

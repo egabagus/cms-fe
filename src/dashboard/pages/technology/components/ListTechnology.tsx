@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import ApiConnectionService from "../../../services/auth/ApiConnectionService";
+import ApiConnectionService from "../../../services/ApiConnectionService";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Stack } from "@mui/material";

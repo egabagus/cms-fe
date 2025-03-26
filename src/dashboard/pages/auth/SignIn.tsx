@@ -24,7 +24,7 @@ import axios from "axios";
 import { JSX } from "@emotion/react/jsx-runtime";
 import Loader from "../../utils/components/Loader";
 import { Alert, Snackbar } from "@mui/material";
-import ApiConnectionService from "../../services/auth/ApiConnectionService";
+import ApiConnectionService from "../../services/ApiConnectionService";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",

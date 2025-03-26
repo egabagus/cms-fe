@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import ApiConnectionService from "./ApiConnectionService";
+import ApiConnectionService from "../ApiConnectionService";
 
 export default function useLogout() {
   const navigate = useNavigate();

@@ -8,7 +8,7 @@ import {
 import CustomModal from "../../../components/CustomModal";
 import { useEffect, useState } from "react";
 import { Tech } from "../../../../types/tech.types";
-import ApiConnectionService from "../../../services/auth/ApiConnectionService";
+import ApiConnectionService from "../../../services/ApiConnectionService";
 import { useTechContext } from "../TechContext";
 import Loader from "../../../utils/components/Loader";
 

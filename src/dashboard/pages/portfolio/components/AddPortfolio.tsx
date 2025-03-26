@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import CustomModal from "../../../components/CustomModal";
-import ApiConnectionService from "../../../services/auth/ApiConnectionService";
+import ApiConnectionService from "../../../services/ApiConnectionService";
 import { createEditor, Descendant } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
 import RichTextEditor from "../../../components/RichTextEditor";
