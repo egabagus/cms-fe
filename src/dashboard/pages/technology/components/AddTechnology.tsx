@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import CustomModal from "../../../components/CustomModal";
 import { useState } from "react";
-import ApiConnectionService from "../../../services/auth/ApiConnectionService";
+import ApiConnectionService from "../../../services/ApiConnectionService";
 import { useTechContext } from "../TechContext";
 
 export default function AddTechnology() {

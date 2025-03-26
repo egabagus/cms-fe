@@ -1,9 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import ApiConnectionService from "../../../services/auth/ApiConnectionService";
+import ApiConnectionService from "../../../services/ApiConnectionService";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { IconButton } from "@mui/material";
+import { IconButton, Stack } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import { useTechContext } from "../TechContext";
+import EditTechnology from "./EditTechnology";
+import { Tech } from "../../../../types/tech.types";
 
 export default function ListTechnology() {
   const { tech, rowCount, paginationModel, setPaginationModel, fetchTech } =
@@ -13,6 +16,18 @@ export default function ListTechnology() {
     ApiConnectionService.post("/technology/delete", { id }).then(() => {
       fetchTech();
     });
+  };
+
+  const [openEdit, setOpenEdit] = useState(false);
+  const [selectedData, setSelectedData] = useState<Tech | null>(null);
+
+  const handleEdit = (data: {
+    id: number;
+    name: string;
+    description: string;
+  }) => {
+    setSelectedData(data);
+    setOpenEdit(true);
   };
 
   const columns: GridColDef[] = [
@@ -32,12 +47,23 @@ export default function ListTechnology() {
       headerName: "Actions",
       flex: 1,
       renderCell: (params) => (
-        <IconButton
-          aria-label="delete"
-          onClick={() => handleDelete(params.row.id)}
-        >
-          <DeleteIcon />
-        </IconButton>
+        <Stack direction="row" spacing={1}>
+          <IconButton
+            aria-label="edit"
+            size="small"
+            onClick={() => handleEdit(params.row)}
+          >
+            <EditIcon />
+          </IconButton>
+          <IconButton
+            aria-label="delete"
+            onClick={() => handleDelete(params.row.id)}
+            size="small"
+            color="error"
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Stack>
       ),
     },
   ];
@@ -53,6 +79,11 @@ export default function ListTechnology() {
         paginationMode="server"
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
+      />
+      <EditTechnology
+        open={openEdit}
+        handleClose={() => setOpenEdit(false)}
+        data={selectedData}
       />
     </div>
   );

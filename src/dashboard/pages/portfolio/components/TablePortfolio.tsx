@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ApiConnectionService from "../../../services/auth/ApiConnectionService";
+import ApiConnectionService from "../../../services/ApiConnectionService";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Button, IconButton, Stack } from "@mui/material";
 import DetailPortfolio from "./DetailPortfolio";

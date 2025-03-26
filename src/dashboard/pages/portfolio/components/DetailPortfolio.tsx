@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import CustomModal from "../../../components/CustomModal";
 import { useEffect, useState } from "react";
-import ApiConnectionService from "../../../services/auth/ApiConnectionService";
+import ApiConnectionService from "../../../services/ApiConnectionService";
 import { PortfolioData } from "../../../../types/portfolio.types";
 
 const DetailPortfolio = ({
