@@ -8,6 +8,7 @@ import ProtectedRoute from "./dashboard/services/auth/ProtectedRoute.tsx";
 import RedirectToAdmin from "./dashboard/services/auth/RedirectToAdmin.tsx";
 import IndexTechnology from "./dashboard/pages/technology/IndexTechnology.tsx";
 import CreatePortfolio from "./dashboard/pages/portfolio/components/CreatePortfolio.tsx";
+import IndexSkill from "./dashboard/pages/skill/IndexSkill.tsx";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
             <Route path="portfolio" element={<ListPortfolios />} />
             <Route path="portfolio/create" element={<CreatePortfolio />} />
             <Route path="tech" element={<IndexTechnology />} />
+            <Route path="skill" element={<IndexSkill />} />
           </Route>
         </Routes>
       </BrowserRouter>
