@@ -31,7 +31,7 @@ export const SkillProvider = ({ children }: { children: React.ReactNode }) => {
       },
     }).then((response) => {
       setSkill(response.data.data);
-      setRowCount(response.data.data.total);
+      setRowCount(response.data.meta.total);
     });
   };
 

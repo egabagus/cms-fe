@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { SkillProvider } from "./SkillContext";
 import ListSkill from "./components/ListSkill";
+import AddSkill from "./components/AddSkill";
 
 export default function IndexSkill() {
   return (
@@ -24,7 +25,7 @@ export default function IndexSkill() {
                 List Skill
               </Typography>
               <Stack direction="row" spacing={1}>
-                <Button variant="contained">Add Skill</Button>
+                <AddSkill />
               </Stack>
             </Stack>
             <CardContent sx={{ marginTop: 2 }}>

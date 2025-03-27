@@ -118,7 +118,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     })
       .then((response) => {
         navigate("/admin");
-        sessionStorage.setItem("authToken", response.data.access_token);
+        localStorage.setItem("authToken", response.data.access_token);
         setLoading(false);
       })
       .catch((err) => {

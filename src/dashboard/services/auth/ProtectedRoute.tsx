@@ -8,7 +8,7 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const token = sessionStorage.getItem("authToken");
+    const token = localStorage.getItem("authToken");
     setIsAuthenticated(!!token);
   }, []);
 
