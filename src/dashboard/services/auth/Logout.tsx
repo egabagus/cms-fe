@@ -5,13 +5,13 @@ export default function useLogout() {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    const token = sessionStorage.getItem("authToken");
+    const token = localStorage.getItem("authToken");
 
     if (token) {
       ApiConnectionService.post("/logout", {})
         .then((response) => {
           console.log(response.data.message);
-          sessionStorage.removeItem("authToken");
+          localStorage.removeItem("authToken");
           navigate("/login");
         })
         .catch((response) => {
